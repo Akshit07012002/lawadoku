@@ -159,8 +159,22 @@ export const GameHub: React.FC = () => {
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="min-h-screen bg-black text-white flex items-center justify-center"
+            className="min-h-screen bg-black text-white flex items-center justify-center relative"
         >
+            {/* Skip Ad Button */}
+            <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 1 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={() => setGameState('doorstep')}
+                className="absolute top-4 right-4 w-12 h-12 bg-gray-800 hover:bg-gray-700 text-white rounded-full flex items-center justify-center text-2xl font-bold transition-all duration-200 z-10"
+                title="Skip Ad"
+            >
+                ✕
+            </motion.button>
+            
             <div className="text-center">
                 <motion.div
                     animate={{

@@ -100,7 +100,7 @@ export const Game2048: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
             const moveRow = (row: Tile[], reverse: boolean = false) => {
                 const filtered = row.filter(tile => tile !== null)
-                
+
                 const merged: Tile[] = []
                 for (let i = 0; i < filtered.length; i++) {
                     if (i < filtered.length - 1 && filtered[i].value === filtered[i + 1].value) {

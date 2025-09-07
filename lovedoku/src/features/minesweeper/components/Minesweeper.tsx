@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
+import MinesweeperCompletionModal from './MinesweeperCompletionModal'
 
 interface Cell {
     isMine: boolean
@@ -12,7 +13,7 @@ interface Cell {
 
 type Difficulty = 'easy' | 'medium' | 'hard'
 
-export const Minesweeper: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+export const Minesweeper: React.FC<{ onClose: () => void; onBackToHub?: () => void }> = ({ onClose, onBackToHub }) => {
     const [board, setBoard] = useState<Cell[][]>([])
     const [gameOver, setGameOver] = useState(false)
     const [gameWon, setGameWon] = useState(false)
@@ -22,6 +23,7 @@ export const Minesweeper: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const [time, setTime] = useState(0)
     const [flagsUsed, setFlagsUsed] = useState(0)
     const [gameStarted, setGameStarted] = useState(false)
+    const [showCompletionModal, setShowCompletionModal] = useState(false)
 
     const getGameConfig = (diff: Difficulty) => {
         switch (diff) {
@@ -119,6 +121,7 @@ export const Minesweeper: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     }
                 }
                 setGameOver(true)
+                setTimeout(() => setShowCompletionModal(true), 1000)
                 return newBoard
             }
 
@@ -143,6 +146,7 @@ export const Minesweeper: React.FC<{ onClose: () => void }> = ({ onClose }) => {
             const revealedCount = newBoard.flat().filter(cell => cell.isRevealed).length
             if (revealedCount === BOARD_SIZE * BOARD_SIZE - MINE_COUNT) {
                 setGameWon(true)
+                setTimeout(() => setShowCompletionModal(true), 1000)
             }
 
             return newBoard
@@ -171,8 +175,22 @@ export const Minesweeper: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         setTime(0)
         setFlagsUsed(0)
         setGameStarted(false)
+        setShowCompletionModal(false)
         initializeBoard()
     }, [initializeBoard])
+
+    const handlePlayAgain = () => {
+        setShowCompletionModal(false)
+        resetGame()
+    }
+
+    const handleBackToHub = () => {
+        if (onBackToHub) {
+            onBackToHub()
+        } else {
+            onClose()
+        }
+    }
 
     // Timer effect
     useEffect(() => {
@@ -385,6 +403,18 @@ export const Minesweeper: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     </div>
                 </div>
             </div>
+
+            {/* Completion Modal */}
+            <MinesweeperCompletionModal
+                isOpen={showCompletionModal}
+                onClose={() => setShowCompletionModal(false)}
+                onPlayAgain={handlePlayAgain}
+                onBackToHub={handleBackToHub}
+                isWin={gameWon}
+                time={time}
+                flagsUsed={flagsUsed}
+                difficulty={difficulty}
+            />
         </motion.div>
     )
 }

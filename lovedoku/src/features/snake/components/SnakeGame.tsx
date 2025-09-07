@@ -100,7 +100,8 @@ export const SnakeGame: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                 <div className="text-center mb-4">
                     <h2 className="text-2xl font-bold text-purple-700 mb-2">🐍 Snake Game</h2>
                     <p className="text-gray-600">Score: {score}</p>
-                    <p className="text-sm text-gray-500">Use arrow keys to move, ESC to close</p>
+                    <p className="text-sm text-gray-500 sm:block hidden">Use arrow keys to move, ESC to close</p>
+                    <p className="text-sm text-gray-500 sm:hidden">Use touch controls below to move</p>
                 </div>
 
                 <div className="grid grid-cols-20 grid-rows-20 gap-0 bg-gray-100 border-2 border-gray-300 w-80 h-80 mx-auto">
@@ -126,6 +127,56 @@ export const SnakeGame: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                         }}
                     >
                         ❤️
+                    </div>
+                </div>
+
+                {/* Mobile Arrow Controls */}
+                <div className="mt-4 mb-4">
+                    <div className="grid grid-cols-3 gap-2 max-w-48 mx-auto sm:hidden">
+                        {/* Empty space for top row */}
+                        <div></div>
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setDirection('UP')}
+                            className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg p-3 text-2xl font-bold"
+                        >
+                            ↑
+                        </motion.button>
+                        <div></div>
+                        
+                        {/* Left and Right arrows */}
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setDirection('LEFT')}
+                            className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg p-3 text-2xl font-bold"
+                        >
+                            ←
+                        </motion.button>
+                        <div className="bg-gray-100 dark:bg-gray-800 rounded-lg p-3 text-center text-sm font-medium">
+                            🐍
+                        </div>
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setDirection('RIGHT')}
+                            className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg p-3 text-2xl font-bold"
+                        >
+                            →
+                        </motion.button>
+                        
+                        {/* Empty space for bottom row */}
+                        <div></div>
+                        <motion.button
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            onClick={() => setDirection('DOWN')}
+                            className="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 rounded-lg p-3 text-2xl font-bold"
+                        >
+                            ↓
+                        </motion.button>
+                        <div></div>
                     </div>
                 </div>
 

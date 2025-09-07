@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useSound } from '../../../shared/hooks'
 import { useHighScores } from '../../../core/providers'
 import { useAchievements } from '../../../core/providers'
+import TicTacToeCompletionModal from './TicTacToeCompletionModal'
 
 interface TicTacToeProps {
     onClose: () => void
+    onBackToHub?: () => void
 }
 
 type Player = 'X' | 'O' | null
@@ -17,13 +19,14 @@ const WINNING_COMBINATIONS = [
     [0, 4, 8], [2, 4, 6] // Diagonals
 ]
 
-export const TicTacToe: React.FC<TicTacToeProps> = ({ onClose }) => {
+export const TicTacToe: React.FC<TicTacToeProps> = ({ onClose, onBackToHub }) => {
     const [board, setBoard] = useState<Board>(Array(9).fill(null))
     const [currentPlayer, setCurrentPlayer] = useState<Player>('X')
     const [winner, setWinner] = useState<Player | 'tie' | null>(null)
     const [gameMode, setGameMode] = useState<'vs-human' | 'vs-ai'>('vs-human')
     const [score, setScore] = useState({ X: 0, O: 0, ties: 0 })
     const [isThinking, setIsThinking] = useState(false)
+    const [showCompletionModal, setShowCompletionModal] = useState(false)
 
     const { playSound } = useSound()
     const { addHighScore } = useHighScores()
@@ -63,6 +66,8 @@ export const TicTacToe: React.FC<TicTacToeProps> = ({ onClose }) => {
                 playSound('success')
                 setScore(prev => ({ ...prev, ties: prev.ties + 1 }))
             }
+            // Show completion modal after a short delay
+            setTimeout(() => setShowCompletionModal(true), 1000)
         } else {
             setCurrentPlayer(currentPlayer === 'X' ? 'O' : 'X')
             if (gameMode === 'vs-ai' && currentPlayer === 'X') {
@@ -141,6 +146,8 @@ export const TicTacToe: React.FC<TicTacToeProps> = ({ onClose }) => {
                         playSound('success')
                         setScore(prev => ({ ...prev, ties: prev.ties + 1 }))
                     }
+                    // Show completion modal after a short delay
+                    setTimeout(() => setShowCompletionModal(true), 1000)
                 } else {
                     setCurrentPlayer('X')
                 }
@@ -155,7 +162,21 @@ export const TicTacToe: React.FC<TicTacToeProps> = ({ onClose }) => {
         setCurrentPlayer('X')
         setWinner(null)
         setIsThinking(false)
+        setShowCompletionModal(false)
         playSound('click')
+    }
+
+    const handlePlayAgain = () => {
+        setShowCompletionModal(false)
+        resetGame()
+    }
+
+    const handleBackToHub = () => {
+        if (onBackToHub) {
+            onBackToHub()
+        } else {
+            onClose()
+        }
     }
 
     const resetScore = () => {
@@ -294,6 +315,16 @@ export const TicTacToe: React.FC<TicTacToeProps> = ({ onClose }) => {
                     </motion.button>
                 </div>
             </div>
+
+            {/* Completion Modal */}
+            <TicTacToeCompletionModal
+                isOpen={showCompletionModal}
+                onClose={() => setShowCompletionModal(false)}
+                onPlayAgain={handlePlayAgain}
+                onBackToHub={handleBackToHub}
+                winner={winner}
+                score={score}
+            />
         </motion.div>
     )
 }

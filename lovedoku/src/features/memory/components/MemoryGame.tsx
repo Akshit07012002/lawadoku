@@ -3,9 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useSound } from '../../../shared/hooks'
 import { useHighScores } from '../../../core/providers'
 import { useAchievements } from '../../../core/providers'
+import MemoryCompletionModal from './MemoryCompletionModal'
 
 interface MemoryGameProps {
   onClose: () => void
+  onBackToHub?: () => void
 }
 
 interface Card {
@@ -17,7 +19,7 @@ interface Card {
 
 const EMOJIS = ['🐶', '🐱', '🐭', '🐹', '🐰', '🦊', '🐻', '🐼', '🐨', '🐯', '🦁', '🐮', '🐷', '🐸', '🐵', '🐔', '🐧', '🐦', '🐤', '🦆']
 
-export const MemoryGame: React.FC<MemoryGameProps> = ({ onClose }) => {
+export const MemoryGame: React.FC<MemoryGameProps> = ({ onClose, onBackToHub }) => {
   const [cards, setCards] = useState<Card[]>([])
   const [flippedCards, setFlippedCards] = useState<number[]>([])
   const [moves, setMoves] = useState(0)
@@ -26,6 +28,7 @@ export const MemoryGame: React.FC<MemoryGameProps> = ({ onClose }) => {
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy')
   const [time, setTime] = useState(0)
   const [isGameStarted, setIsGameStarted] = useState(false)
+  const [showCompletionModal, setShowCompletionModal] = useState(false)
 
   const { playSound } = useSound()
   const { addHighScore } = useHighScores()
@@ -146,6 +149,8 @@ export const MemoryGame: React.FC<MemoryGameProps> = ({ onClose }) => {
         time
       })
       checkAchievements('memory', matches, time)
+      // Show completion modal after a short delay
+      setTimeout(() => setShowCompletionModal(true), 1000)
     }
   }, [matches, difficulty, time, playSound, addHighScore, checkAchievements, getCardCount])
 
@@ -159,6 +164,19 @@ export const MemoryGame: React.FC<MemoryGameProps> = ({ onClose }) => {
     const maxMoves = getCardCount() * 2
     const efficiency = Math.max(0, ((maxMoves - moves) / maxMoves) * 100)
     return Math.round(efficiency)
+  }
+
+  const handlePlayAgain = () => {
+    setShowCompletionModal(false)
+    initializeCards()
+  }
+
+  const handleBackToHub = () => {
+    if (onBackToHub) {
+      onBackToHub()
+    } else {
+      onClose()
+    }
   }
 
   return (
@@ -207,22 +225,6 @@ export const MemoryGame: React.FC<MemoryGameProps> = ({ onClose }) => {
             </div>
           </div>
 
-          {/* Win Message */}
-          {gameWon && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="bg-yellow-100 dark:bg-yellow-900 border-2 border-yellow-400 dark:border-yellow-600 rounded-lg p-4 mb-4"
-            >
-              <h3 className="text-2xl font-bold text-yellow-800 dark:text-yellow-200 mb-2">🎉 Congratulations! 🎉</h3>
-              <p className="text-yellow-700 dark:text-yellow-300">
-                You completed the game in {moves} moves and {formatTime(time)}!
-              </p>
-              <p className="text-yellow-600 dark:text-yellow-400 font-semibold">
-                Efficiency Score: {getScore()}%
-              </p>
-            </motion.div>
-          )}
         </div>
 
         {/* Game Board */}
@@ -284,6 +286,18 @@ export const MemoryGame: React.FC<MemoryGameProps> = ({ onClose }) => {
           </motion.button>
         </div>
       </div>
+
+      {/* Completion Modal */}
+      <MemoryCompletionModal
+        isOpen={showCompletionModal}
+        onClose={() => setShowCompletionModal(false)}
+        onPlayAgain={handlePlayAgain}
+        onBackToHub={handleBackToHub}
+        moves={moves}
+        time={time}
+        efficiency={getScore()}
+        difficulty={difficulty}
+      />
     </motion.div>
   )
 }

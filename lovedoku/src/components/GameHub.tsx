@@ -1,9 +1,9 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { useTheme } from '../contexts/ThemeContext'
-import { useAchievements } from '../contexts/AchievementsContext'
-import { useSound } from '../hooks/useSound'
+import { useTheme } from '../core/providers'
+import { useAchievements } from '../core/providers'
+import { useSound } from '../shared/hooks'
 
 export const GameHub: React.FC = () => {
     const navigate = useNavigate()

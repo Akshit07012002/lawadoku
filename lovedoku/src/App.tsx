@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react'
 import { AppRouter } from './components/AppRouter'
-import { ThemeProvider } from './contexts/ThemeContext'
-import { HighScoresProvider } from './contexts/HighScoresContext'
-import { AchievementsProvider } from './contexts/AchievementsContext'
+import { ThemeProvider, HighScoresProvider, AchievementsProvider } from './core/providers'
 import './App.css'
 
 const App: React.FC = () => {

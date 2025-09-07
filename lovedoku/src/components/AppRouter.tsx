@@ -1,13 +1,14 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { GameHub } from './GameHub'
-import { SudokuPage } from './SudokuPage'
-import { Minesweeper } from './Minesweeper'
-import { SnakeGame } from './SnakeGame'
-import { Game2048 } from './Game2048'
-import { TicTacToe } from './TicTacToe'
-import { MemoryGame } from './MemoryGame'
-import { TriviaGame } from './TriviaGame'
+import { SudokuPage } from '../features/sudoku/pages'
+import { Minesweeper } from '../features/minesweeper'
+import { SnakeGame } from '../features/snake'
+import { Game2048 } from '../features/game2048'
+import { TicTacToe } from '../features/tic-tac-toe'
+import { MemoryGame } from '../features/memory'
+import { TriviaGame } from '../features/trivia'
+import { GameLayout } from '../layouts'
 
 export const AppRouter: React.FC = () => {
 
@@ -23,54 +24,54 @@ export const AppRouter: React.FC = () => {
         <Route
           path="/minesweeper"
           element={
-            <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
+            <GameLayout title="Minesweeper" onBack={() => window.history.back()}>
               <Minesweeper onClose={() => window.history.back()} />
-            </div>
+            </GameLayout>
           }
         />
 
         <Route
           path="/snake"
           element={
-            <div className="min-h-screen bg-gradient-to-br from-yellow-50 to-orange-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
+            <GameLayout title="Snake Game" onBack={() => window.history.back()}>
               <SnakeGame onClose={() => window.history.back()} />
-            </div>
+            </GameLayout>
           }
         />
 
         <Route
           path="/2048"
           element={
-            <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
+            <GameLayout title="2048" onBack={() => window.history.back()}>
               <Game2048 onClose={() => window.history.back()} />
-            </div>
+            </GameLayout>
           }
         />
 
         <Route
           path="/tic-tac-toe"
           element={
-            <div className="min-h-screen bg-gradient-to-br from-blue-50 to-cyan-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
+            <GameLayout title="Tic Tac Toe" onBack={() => window.history.back()}>
               <TicTacToe onClose={() => window.history.back()} />
-            </div>
+            </GameLayout>
           }
         />
 
         <Route
           path="/memory"
           element={
-            <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
+            <GameLayout title="Memory Game" onBack={() => window.history.back()}>
               <MemoryGame onClose={() => window.history.back()} />
-            </div>
+            </GameLayout>
           }
         />
 
         <Route
           path="/trivia"
           element={
-            <div className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
+            <GameLayout title="Trivia Game" onBack={() => window.history.back()}>
               <TriviaGame onClose={() => window.history.back()} />
-            </div>
+            </GameLayout>
           }
         />
 

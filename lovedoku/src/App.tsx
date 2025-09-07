@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react'
 import { GameHub } from './components/GameHub'
+import { ThemeProvider } from './contexts/ThemeContext'
+import { HighScoresProvider } from './contexts/HighScoresContext'
+import { AchievementsProvider } from './contexts/AchievementsContext'
 import './App.css'
 
 const App: React.FC = () => {
@@ -43,7 +46,15 @@ const App: React.FC = () => {
         console.log("Committing my heart to: Lawanya <3")
     }, [])
 
-    return <GameHub />
+    return (
+        <ThemeProvider>
+            <HighScoresProvider>
+                <AchievementsProvider>
+                    <GameHub />
+                </AchievementsProvider>
+            </HighScoresProvider>
+        </ThemeProvider>
+    )
 }
 
 export default App

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Modal } from '../../../../shared/components/Modal';
+import { Modal } from '../../../shared/components/Modal';
 
 interface MemoryCompletionModalProps {
   isOpen: boolean;

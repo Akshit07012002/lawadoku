@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSound } from '../hooks/useSound'
 import { useHighScores } from '../contexts/HighScoresContext'
@@ -35,11 +35,10 @@ export const TriviaGame: React.FC<TriviaGameProps> = ({ onClose }) => {
     const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy')
     const [category, setCategory] = useState('9') // General Knowledge
   const [isAnswered, setIsAnswered] = useState(false)
-  const hasLoadedRef = useRef(false)
 
-  const { playSound } = useSound()
-  const { addHighScore } = useHighScores()
-  const { checkAchievements } = useAchievements()
+    const { playSound } = useSound()
+    const { addHighScore } = useHighScores()
+    const { checkAchievements } = useAchievements()
 
     const categories = [
         { id: '9', name: 'General Knowledge' },
@@ -237,21 +236,10 @@ export const TriviaGame: React.FC<TriviaGameProps> = ({ onClose }) => {
         }, 2000)
     }
 
-  // Load questions on component mount (only once)
+  // Load questions on component mount and when settings change
   useEffect(() => {
-    if (!hasLoadedRef.current) {
-      console.log('TriviaGame mounted, fetching questions...')
-      hasLoadedRef.current = true
-      fetchQuestions()
-    }
-  }, [])
-
-  // Load questions when settings change
-  useEffect(() => {
-    if (hasLoadedRef.current) {
-      console.log('Settings changed, fetching new questions...')
-      fetchQuestions()
-    }
+    console.log('TriviaGame: Loading questions...')
+    fetchQuestions()
   }, [category, difficulty])
 
     // Timer

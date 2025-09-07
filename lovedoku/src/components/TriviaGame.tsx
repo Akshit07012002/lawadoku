@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useSound } from '../hooks/useSound'
 import { useHighScores } from '../contexts/HighScoresContext'
@@ -34,11 +34,12 @@ export const TriviaGame: React.FC<TriviaGameProps> = ({ onClose }) => {
     const [maxStreak, setMaxStreak] = useState(0)
     const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy')
     const [category, setCategory] = useState('9') // General Knowledge
-    const [isAnswered, setIsAnswered] = useState(false)
+  const [isAnswered, setIsAnswered] = useState(false)
+  const hasLoadedRef = useRef(false)
 
-    const { playSound } = useSound()
-    const { addHighScore } = useHighScores()
-    const { checkAchievements } = useAchievements()
+  const { playSound } = useSound()
+  const { addHighScore } = useHighScores()
+  const { checkAchievements } = useAchievements()
 
     const categories = [
         { id: '9', name: 'General Knowledge' },
@@ -191,7 +192,7 @@ export const TriviaGame: React.FC<TriviaGameProps> = ({ onClose }) => {
         playSound('click')
     }
 
-  const handleAnswer = (answer: string) => {
+    const handleAnswer = (answer: string) => {
         if (isAnswered) return
 
         setIsAnswered(true)
@@ -233,31 +234,42 @@ export const TriviaGame: React.FC<TriviaGameProps> = ({ onClose }) => {
                 checkAchievements('trivia', score)
                 playSound('win')
             }
-    }, 2000)
-  }
+        }, 2000)
+    }
 
-  // Load questions on component mount
+  // Load questions on component mount (only once)
   useEffect(() => {
-    console.log('TriviaGame mounted, fetching questions...')
-    fetchQuestions()
+    if (!hasLoadedRef.current) {
+      console.log('TriviaGame mounted, fetching questions...')
+      hasLoadedRef.current = true
+      fetchQuestions()
+    }
+  }, [])
+
+  // Load questions when settings change
+  useEffect(() => {
+    if (hasLoadedRef.current) {
+      console.log('Settings changed, fetching new questions...')
+      fetchQuestions()
+    }
   }, [category, difficulty])
 
-  // Timer
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null
-    if (gameState === 'playing' && timeLeft > 0 && !isAnswered) {
-      interval = setInterval(() => {
-        setTimeLeft(prev => prev - 1)
-      }, 1000)
-    } else if (timeLeft === 0 && !isAnswered) {
-      handleAnswer('')
-    }
-    return () => {
-      if (interval) clearInterval(interval)
-    }
-  }, [gameState, timeLeft, isAnswered])
+    // Timer
+    useEffect(() => {
+        let interval: NodeJS.Timeout | null = null
+        if (gameState === 'playing' && timeLeft > 0 && !isAnswered) {
+            interval = setInterval(() => {
+                setTimeLeft(prev => prev - 1)
+            }, 1000)
+        } else if (timeLeft === 0 && !isAnswered) {
+            handleAnswer('')
+        }
+        return () => {
+            if (interval) clearInterval(interval)
+        }
+    }, [gameState, timeLeft, isAnswered])
 
-  const getDifficultyColor = (diff: string) => {
+    const getDifficultyColor = (diff: string) => {
         switch (diff) {
             case 'easy': return 'text-green-600 bg-green-100'
             case 'medium': return 'text-yellow-600 bg-yellow-100'

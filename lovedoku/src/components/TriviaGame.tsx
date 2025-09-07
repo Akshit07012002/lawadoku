@@ -71,10 +71,26 @@ export const TriviaGame: React.FC<TriviaGameProps> = ({ onClose }) => {
   const fetchQuestions = async () => {
     try {
       setGameState('loading')
+      console.log('Fetching questions from OpenTDB API...')
+      
       const response = await fetch(
-        `https://opentdb.com/api.php?amount=10&category=${category}&difficulty=${difficulty}&type=multiple`
+        `https://opentdb.com/api.php?amount=10&category=${category}&difficulty=${difficulty}&type=multiple`,
+        {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+        }
       )
+      
+      console.log('Response status:', response.status)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
+      console.log('API Response:', data)
       
       if (data.response_code === 0) {
         const processedQuestions = data.results.map((q: Question) => {
@@ -98,13 +114,81 @@ export const TriviaGame: React.FC<TriviaGameProps> = ({ onClose }) => {
         setGameState('playing')
         playSound('click')
       } else {
-        console.error('Failed to fetch questions')
-        setGameState('finished')
+        console.error('API returned error code:', data.response_code)
+        // Fallback to mock data
+        loadMockQuestions()
       }
     } catch (error) {
       console.error('Error fetching questions:', error)
-      setGameState('finished')
+      // Fallback to mock data
+      loadMockQuestions()
     }
+  }
+
+  const loadMockQuestions = () => {
+    console.log('Loading mock questions as fallback...')
+    const mockQuestions: TriviaQuestion[] = [
+      {
+        category: 'General Knowledge',
+        type: 'multiple',
+        difficulty: 'easy',
+        question: 'What is the capital of France?',
+        correct_answer: 'Paris',
+        incorrect_answers: ['London', 'Berlin', 'Madrid'],
+        all_answers: ['Paris', 'London', 'Berlin', 'Madrid'],
+        shuffled_answers: ['Paris', 'London', 'Berlin', 'Madrid']
+      },
+      {
+        category: 'General Knowledge',
+        type: 'multiple',
+        difficulty: 'easy',
+        question: 'What is 2 + 2?',
+        correct_answer: '4',
+        incorrect_answers: ['3', '5', '6'],
+        all_answers: ['4', '3', '5', '6'],
+        shuffled_answers: ['4', '3', '5', '6']
+      },
+      {
+        category: 'General Knowledge',
+        type: 'multiple',
+        difficulty: 'medium',
+        question: 'Which planet is known as the Red Planet?',
+        correct_answer: 'Mars',
+        incorrect_answers: ['Venus', 'Jupiter', 'Saturn'],
+        all_answers: ['Mars', 'Venus', 'Jupiter', 'Saturn'],
+        shuffled_answers: ['Mars', 'Venus', 'Jupiter', 'Saturn']
+      },
+      {
+        category: 'General Knowledge',
+        type: 'multiple',
+        difficulty: 'hard',
+        question: 'What is the largest mammal in the world?',
+        correct_answer: 'Blue whale',
+        incorrect_answers: ['African elephant', 'Giraffe', 'Hippopotamus'],
+        all_answers: ['Blue whale', 'African elephant', 'Giraffe', 'Hippopotamus'],
+        shuffled_answers: ['Blue whale', 'African elephant', 'Giraffe', 'Hippopotamus']
+      },
+      {
+        category: 'General Knowledge',
+        type: 'multiple',
+        difficulty: 'easy',
+        question: 'What color do you get when you mix red and blue?',
+        correct_answer: 'Purple',
+        incorrect_answers: ['Green', 'Orange', 'Yellow'],
+        all_answers: ['Purple', 'Green', 'Orange', 'Yellow'],
+        shuffled_answers: ['Purple', 'Green', 'Orange', 'Yellow']
+      }
+    ]
+    
+    setQuestions(mockQuestions)
+    setCurrentQuestion(0)
+    setScore(0)
+    setStreak(0)
+    setMaxStreak(0)
+    setTimeLeft(30)
+    setIsAnswered(false)
+    setGameState('playing')
+    playSound('click')
   }
 
   // Timer

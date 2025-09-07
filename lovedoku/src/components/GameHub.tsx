@@ -31,8 +31,8 @@ export const GameHub: React.FC = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className={`min-h-screen p-8 ${theme === 'dark'
-                    ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900'
-                    : 'bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100'
+                ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900'
+                : 'bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100'
                 }`}
         >
             <div className="max-w-6xl mx-auto text-center">
@@ -54,8 +54,8 @@ export const GameHub: React.FC = () => {
                             whileTap={{ scale: 0.9 }}
                             onClick={toggleTheme}
                             className={`p-3 rounded-full ${theme === 'dark'
-                                    ? 'bg-yellow-500 hover:bg-yellow-600'
-                                    : 'bg-gray-800 hover:bg-gray-700'
+                                ? 'bg-yellow-500 hover:bg-yellow-600'
+                                : 'bg-gray-800 hover:bg-gray-700'
                                 } text-white`}
                             title="Toggle Theme"
                         >
@@ -66,8 +66,8 @@ export const GameHub: React.FC = () => {
                             whileTap={{ scale: 0.9 }}
                             onClick={toggleSound}
                             className={`p-3 rounded-full ${soundEnabled
-                                    ? 'bg-green-500 hover:bg-green-600'
-                                    : 'bg-red-500 hover:bg-red-600'
+                                ? 'bg-green-500 hover:bg-green-600'
+                                : 'bg-red-500 hover:bg-red-600'
                                 } text-white`}
                             title="Toggle Sound"
                         >
@@ -92,8 +92,8 @@ export const GameHub: React.FC = () => {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.6 }}
                     className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${theme === 'dark'
-                            ? 'bg-yellow-900 text-yellow-200'
-                            : 'bg-yellow-100 text-yellow-800'
+                        ? 'bg-yellow-900 text-yellow-200'
+                        : 'bg-yellow-100 text-yellow-800'
                         } mb-8`}
                 >
                     <span className="text-2xl">🏆</span>
@@ -110,8 +110,8 @@ export const GameHub: React.FC = () => {
                             setGameState('sudoku')
                         }}
                         className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${theme === 'dark'
-                                ? 'bg-gray-700 hover:bg-gray-600'
-                                : 'bg-white hover:bg-gray-50'
+                            ? 'bg-gray-700 hover:bg-gray-600'
+                            : 'bg-white hover:bg-gray-50'
                             }`}
                     >
                         <div className="text-4xl mb-4">🧩</div>
@@ -130,8 +130,8 @@ export const GameHub: React.FC = () => {
                             setGameState('game2048')
                         }}
                         className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${theme === 'dark'
-                                ? 'bg-gray-700 hover:bg-gray-600'
-                                : 'bg-white hover:bg-gray-50'
+                            ? 'bg-gray-700 hover:bg-gray-600'
+                            : 'bg-white hover:bg-gray-50'
                             }`}
                     >
                         <div className="text-4xl mb-4">🔢</div>
@@ -150,8 +150,8 @@ export const GameHub: React.FC = () => {
                             setGameState('snake')
                         }}
                         className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${theme === 'dark'
-                                ? 'bg-gray-700 hover:bg-gray-600'
-                                : 'bg-white hover:bg-gray-50'
+                            ? 'bg-gray-700 hover:bg-gray-600'
+                            : 'bg-white hover:bg-gray-50'
                             }`}
                     >
                         <div className="text-4xl mb-4">🐍</div>
@@ -170,8 +170,8 @@ export const GameHub: React.FC = () => {
                             setGameState('minesweeper')
                         }}
                         className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${theme === 'dark'
-                                ? 'bg-gray-700 hover:bg-gray-600'
-                                : 'bg-white hover:bg-gray-50'
+                            ? 'bg-gray-700 hover:bg-gray-600'
+                            : 'bg-white hover:bg-gray-50'
                             }`}
                     >
                         <div className="text-4xl mb-4">💣</div>
@@ -190,8 +190,8 @@ export const GameHub: React.FC = () => {
                             setGameState('tic-tac-toe')
                         }}
                         className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${theme === 'dark'
-                                ? 'bg-gray-700 hover:bg-gray-600'
-                                : 'bg-white hover:bg-gray-50'
+                            ? 'bg-gray-700 hover:bg-gray-600'
+                            : 'bg-white hover:bg-gray-50'
                             }`}
                     >
                         <div className="text-4xl mb-4">⭕</div>
@@ -210,8 +210,8 @@ export const GameHub: React.FC = () => {
                             setGameState('memory')
                         }}
                         className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${theme === 'dark'
-                                ? 'bg-gray-700 hover:bg-gray-600'
-                                : 'bg-white hover:bg-gray-50'
+                            ? 'bg-gray-700 hover:bg-gray-600'
+                            : 'bg-white hover:bg-gray-50'
                             }`}
                     >
                         <div className="text-4xl mb-4">🧠</div>
@@ -229,19 +229,16 @@ export const GameHub: React.FC = () => {
                             playSound('click')
                             setGameState('trivia')
                         }}
-                        className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${
-                            theme === 'dark' 
-                                ? 'bg-gray-700 hover:bg-gray-600' 
-                                : 'bg-white hover:bg-gray-50'
-                        }`}
+                        className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${theme === 'dark'
+                            ? 'bg-gray-700 hover:bg-gray-600'
+                            : 'bg-white hover:bg-gray-50'
+                            }`}
                     >
                         <div className="text-4xl mb-4">🎯</div>
-                        <h3 className={`text-xl font-bold mb-2 ${
-                            theme === 'dark' ? 'text-purple-300' : 'text-purple-700'
-                        }`}>Trivia</h3>
-                        <p className={`${
-                            theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                        }`}>Test your knowledge</p>
+                        <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-purple-300' : 'text-purple-700'
+                            }`}>Trivia</h3>
+                        <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
+                            }`}>Test your knowledge</p>
                     </motion.div>
 
                 </div>

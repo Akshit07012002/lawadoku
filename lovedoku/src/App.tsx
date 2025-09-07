@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { GameHub } from './components/GameHub'
+import { AppRouter } from './components/AppRouter'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { HighScoresProvider } from './contexts/HighScoresContext'
 import { AchievementsProvider } from './contexts/AchievementsContext'
@@ -50,7 +50,7 @@ const App: React.FC = () => {
         <ThemeProvider>
             <HighScoresProvider>
                 <AchievementsProvider>
-                    <GameHub />
+                    <AppRouter />
                 </AchievementsProvider>
             </HighScoresProvider>
         </ThemeProvider>

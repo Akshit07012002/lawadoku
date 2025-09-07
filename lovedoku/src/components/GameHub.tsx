@@ -1,32 +1,22 @@
-import React, { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { SudokuGrid } from './SudokuGrid'
-import { SnakeGame } from './SnakeGame'
-import { Game2048 } from './Game2048'
-import { Minesweeper } from './Minesweeper'
-import { TicTacToe } from './TicTacToe'
-import { MemoryGame } from './MemoryGame'
-import { TriviaGame } from './TriviaGame'
+import React from 'react'
+import { motion } from 'framer-motion'
+import { useNavigate } from 'react-router-dom'
 import { useTheme } from '../contexts/ThemeContext'
 import { useAchievements } from '../contexts/AchievementsContext'
 import { useSound } from '../hooks/useSound'
 
-type GameState = 'hub' | 'sudoku' | 'snake' | 'game2048' | 'minesweeper' | 'tic-tac-toe' | 'memory' | 'trivia'
-
 export const GameHub: React.FC = () => {
-    const [gameState, setGameState] = useState<GameState>('hub')
+    const navigate = useNavigate()
     const { theme, toggleTheme } = useTheme()
     const { getUnlockedCount } = useAchievements()
     const { playSound, isEnabled: soundEnabled, toggleSound } = useSound()
 
-    const handleSudokuComplete = () => {
-        // Just show a completion message or return to hub
-        playSound('win')
-        alert('Congratulations! You completed the Sudoku puzzle!')
-        setGameState('hub')
+    const handleGameClick = (gamePath: string) => {
+        playSound('click')
+        navigate(gamePath)
     }
 
-    const renderHub = () => (
+    return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -48,67 +38,61 @@ export const GameHub: React.FC = () => {
                     >
                         🎮 Game Hub 🎮
                     </motion.h1>
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                         <motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={toggleTheme}
-                            className={`p-3 rounded-full ${theme === 'dark'
-                                ? 'bg-yellow-500 hover:bg-yellow-600'
-                                : 'bg-gray-800 hover:bg-gray-700'
-                                } text-white`}
-                            title="Toggle Theme"
+                            className={`px-4 py-2 rounded-lg font-medium transition-all ${theme === 'dark'
+                                ? 'bg-gray-700 text-white hover:bg-gray-600'
+                                : 'bg-white text-gray-800 hover:bg-gray-100'
+                                }`}
                         >
                             {theme === 'dark' ? '☀️' : '🌙'}
                         </motion.button>
                         <motion.button
-                            whileHover={{ scale: 1.1 }}
-                            whileTap={{ scale: 0.9 }}
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
                             onClick={toggleSound}
-                            className={`p-3 rounded-full ${soundEnabled
-                                ? 'bg-green-500 hover:bg-green-600'
-                                : 'bg-red-500 hover:bg-red-600'
-                                } text-white`}
-                            title="Toggle Sound"
+                            className={`px-4 py-2 rounded-lg font-medium transition-all ${theme === 'dark'
+                                ? 'bg-gray-700 text-white hover:bg-gray-600'
+                                : 'bg-white text-gray-800 hover:bg-gray-100'
+                                }`}
                         >
                             {soundEnabled ? '🔊' : '🔇'}
                         </motion.button>
                     </div>
                 </div>
 
-                <motion.p
+                {/* Stats */}
+                <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.4 }}
-                    className={`text-xl mb-4 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                        }`}
+                    className="mb-8"
                 >
-                    A collection of fun mini-games for everyone
-                </motion.p>
+                    <div className={`inline-flex items-center gap-2 px-6 py-3 rounded-full ${theme === 'dark'
+                        ? 'bg-gray-800 text-gray-300'
+                        : 'bg-white text-gray-700'
+                        }`}
+                    >
+                        <span className="text-2xl">🏆</span>
+                        <span className="font-semibold">Achievements: {getUnlockedCount()}</span>
+                    </div>
+                </motion.div>
 
-                {/* Achievement Counter */}
+                {/* Games Grid */}
                 <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
                     transition={{ delay: 0.6 }}
-                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${theme === 'dark'
-                        ? 'bg-yellow-900 text-yellow-200'
-                        : 'bg-yellow-100 text-yellow-800'
-                        } mb-8`}
+                    className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto"
                 >
-                    <span className="text-2xl">🏆</span>
-                    <span className="font-semibold">{getUnlockedCount()} Achievements Unlocked</span>
-                </motion.div>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
                     {/* Sudoku Game */}
                     <motion.div
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                            playSound('click')
-                            setGameState('sudoku')
-                        }}
+                        onClick={() => handleGameClick('/sudoku')}
                         className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${theme === 'dark'
                             ? 'bg-gray-700 hover:bg-gray-600'
                             : 'bg-white hover:bg-gray-50'
@@ -125,10 +109,7 @@ export const GameHub: React.FC = () => {
                     <motion.div
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                            playSound('click')
-                            setGameState('game2048')
-                        }}
+                        onClick={() => handleGameClick('/2048')}
                         className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${theme === 'dark'
                             ? 'bg-gray-700 hover:bg-gray-600'
                             : 'bg-white hover:bg-gray-50'
@@ -145,10 +126,7 @@ export const GameHub: React.FC = () => {
                     <motion.div
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                            playSound('click')
-                            setGameState('snake')
-                        }}
+                        onClick={() => handleGameClick('/snake')}
                         className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${theme === 'dark'
                             ? 'bg-gray-700 hover:bg-gray-600'
                             : 'bg-white hover:bg-gray-50'
@@ -165,10 +143,7 @@ export const GameHub: React.FC = () => {
                     <motion.div
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                            playSound('click')
-                            setGameState('minesweeper')
-                        }}
+                        onClick={() => handleGameClick('/minesweeper')}
                         className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${theme === 'dark'
                             ? 'bg-gray-700 hover:bg-gray-600'
                             : 'bg-white hover:bg-gray-50'
@@ -185,10 +160,7 @@ export const GameHub: React.FC = () => {
                     <motion.div
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                            playSound('click')
-                            setGameState('tic-tac-toe')
-                        }}
+                        onClick={() => handleGameClick('/tic-tac-toe')}
                         className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${theme === 'dark'
                             ? 'bg-gray-700 hover:bg-gray-600'
                             : 'bg-white hover:bg-gray-50'
@@ -205,10 +177,7 @@ export const GameHub: React.FC = () => {
                     <motion.div
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                            playSound('click')
-                            setGameState('memory')
-                        }}
+                        onClick={() => handleGameClick('/memory')}
                         className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${theme === 'dark'
                             ? 'bg-gray-700 hover:bg-gray-600'
                             : 'bg-white hover:bg-gray-50'
@@ -216,19 +185,16 @@ export const GameHub: React.FC = () => {
                     >
                         <div className="text-4xl mb-4">🧠</div>
                         <h3 className={`text-xl font-bold mb-2 ${theme === 'dark' ? 'text-purple-300' : 'text-purple-700'
-                            }`}>Memory</h3>
+                            }`}>Memory Game</h3>
                         <p className={`${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'
-                            }`}>Match the pairs</p>
+                            }`}>Match the cards</p>
                     </motion.div>
 
                     {/* Trivia Game */}
                     <motion.div
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                            playSound('click')
-                            setGameState('trivia')
-                        }}
+                        onClick={() => handleGameClick('/trivia')}
                         className={`rounded-2xl p-6 shadow-lg cursor-pointer hover:shadow-xl transition-all ${theme === 'dark'
                             ? 'bg-gray-700 hover:bg-gray-600'
                             : 'bg-white hover:bg-gray-50'
@@ -244,192 +210,5 @@ export const GameHub: React.FC = () => {
                 </div>
             </div>
         </motion.div>
-    )
-
-    const renderSudoku = () => (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 p-8"
-        >
-            <div className="max-w-4xl mx-auto">
-                <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    onClick={() => setGameState('hub')}
-                    className="mb-6 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-                >
-                    ← Back to Hub
-                </motion.button>
-
-                <SudokuGrid onComplete={handleSudokuComplete} />
-            </div>
-        </motion.div>
-    )
-
-
-
-
-    const renderSnakeGame = () => (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="min-h-screen bg-gradient-to-br from-green-100 via-blue-100 to-purple-100 p-8"
-        >
-            <div className="max-w-4xl mx-auto">
-                <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    onClick={() => setGameState('hub')}
-                    className="mb-6 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                >
-                    ← Back to Hub
-                </motion.button>
-
-                <SnakeGame onClose={() => setGameState('hub')} />
-            </div>
-        </motion.div>
-    )
-
-    const renderGame2048 = () => (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="min-h-screen bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 p-8"
-        >
-            <div className="max-w-4xl mx-auto">
-                <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    onClick={() => setGameState('hub')}
-                    className="mb-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                    ← Back to Hub
-                </motion.button>
-
-                <Game2048 onClose={() => setGameState('hub')} />
-            </div>
-        </motion.div>
-    )
-
-    const renderMinesweeper = () => (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="min-h-screen bg-gradient-to-br from-yellow-100 via-orange-100 to-red-100 p-8"
-        >
-            <div className="max-w-4xl mx-auto">
-                <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    onClick={() => setGameState('hub')}
-                    className="mb-6 px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors"
-                >
-                    ← Back to Hub
-                </motion.button>
-
-                <Minesweeper onClose={() => setGameState('hub')} />
-            </div>
-        </motion.div>
-    )
-
-
-    const renderTicTacToe = () => (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-8"
-        >
-            <div className="max-w-4xl mx-auto">
-                <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    onClick={() => {
-                        playSound('click')
-                        setGameState('hub')
-                    }}
-                    className="mb-6 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                >
-                    ← Back to Hub
-                </motion.button>
-
-                <TicTacToe onClose={() => setGameState('hub')} />
-            </div>
-        </motion.div>
-    )
-
-    const renderMemoryGame = () => (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 dark:from-gray-900 dark:to-gray-800 p-8"
-        >
-            <div className="max-w-4xl mx-auto">
-                <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    onClick={() => {
-                        playSound('click')
-                        setGameState('hub')
-                    }}
-                    className="mb-6 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                >
-                    ← Back to Hub
-                </motion.button>
-
-                <MemoryGame onClose={() => setGameState('hub')} />
-            </div>
-        </motion.div>
-    )
-
-    const renderTriviaGame = () => (
-        <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="min-h-screen bg-gradient-to-br from-purple-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-8"
-        >
-            <div className="max-w-4xl mx-auto">
-                <motion.button
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    onClick={() => {
-                        playSound('click')
-                        setGameState('hub')
-                    }}
-                    className="mb-6 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
-                >
-                    ← Back to Hub
-                </motion.button>
-
-                <TriviaGame onClose={() => setGameState('hub')} />
-            </div>
-        </motion.div>
-    )
-
-    return (
-        <AnimatePresence mode="wait">
-            {gameState === 'hub' && renderHub()}
-            {gameState === 'sudoku' && renderSudoku()}
-            {gameState === 'snake' && renderSnakeGame()}
-            {gameState === 'game2048' && renderGame2048()}
-            {gameState === 'minesweeper' && renderMinesweeper()}
-            {gameState === 'tic-tac-toe' && renderTicTacToe()}
-            {gameState === 'memory' && renderMemoryGame()}
-            {gameState === 'trivia' && renderTriviaGame()}
-        </AnimatePresence>
     )
 }

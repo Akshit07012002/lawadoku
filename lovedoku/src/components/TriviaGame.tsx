@@ -34,12 +34,12 @@ export const TriviaGame: React.FC<TriviaGameProps> = ({ onClose }) => {
     const [maxStreak, setMaxStreak] = useState(0)
     const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy')
     const [category, setCategory] = useState('9') // General Knowledge
-  const [isAnswered, setIsAnswered] = useState(false)
-  const isFetchingRef = useRef(false)
+    const [isAnswered, setIsAnswered] = useState(false)
+    const isFetchingRef = useRef(false)
 
-  const { playSound } = useSound()
-  const { addHighScore } = useHighScores()
-  const { checkAchievements } = useAchievements()
+    const { playSound } = useSound()
+    const { addHighScore } = useHighScores()
+    const { checkAchievements } = useAchievements()
 
     const categories = [
         { id: '9', name: 'General Knowledge' },
@@ -69,27 +69,27 @@ export const TriviaGame: React.FC<TriviaGameProps> = ({ onClose }) => {
         return txt.value
     }
 
-  const fetchQuestions = async () => {
-    // Prevent duplicate calls
-    if (isFetchingRef.current) {
-      console.log('Already fetching questions, skipping...')
-      return
-    }
-
-    try {
-      isFetchingRef.current = true
-      setGameState('loading')
-      console.log('Fetching questions from OpenTDB API...')
-
-      const response = await fetch(
-        `https://opentdb.com/api.php?amount=10&category=${category}&difficulty=${difficulty}&type=multiple`,
-        {
-          method: 'GET',
-          headers: {
-            'Accept': 'application/json',
-          },
+    const fetchQuestions = async () => {
+        // Prevent duplicate calls
+        if (isFetchingRef.current) {
+            console.log('Already fetching questions, skipping...')
+            return
         }
-      )
+
+        try {
+            isFetchingRef.current = true
+            setGameState('loading')
+            console.log('Fetching questions from OpenTDB API...')
+
+            const response = await fetch(
+                `https://opentdb.com/api.php?amount=10&category=${category}&difficulty=${difficulty}&type=multiple`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json',
+                    },
+                }
+            )
 
             console.log('Response status:', response.status)
 
@@ -119,21 +119,21 @@ export const TriviaGame: React.FC<TriviaGameProps> = ({ onClose }) => {
                 setMaxStreak(0)
                 setTimeLeft(30)
                 setIsAnswered(false)
-        setGameState('playing')
-        playSound('click')
-      } else {
-        console.error('API returned error code:', data.response_code)
-        // Fallback to mock data
-        loadMockQuestions()
-      }
-    } catch (error) {
-      console.error('Error fetching questions:', error)
-      // Fallback to mock data
-      loadMockQuestions()
-    } finally {
-      isFetchingRef.current = false
+                setGameState('playing')
+                playSound('click')
+            } else {
+                console.error('API returned error code:', data.response_code)
+                // Fallback to mock data
+                loadMockQuestions()
+            }
+        } catch (error) {
+            console.error('Error fetching questions:', error)
+            // Fallback to mock data
+            loadMockQuestions()
+        } finally {
+            isFetchingRef.current = false
+        }
     }
-  }
 
     const loadMockQuestions = () => {
         console.log('Loading mock questions as fallback...')
@@ -254,7 +254,7 @@ export const TriviaGame: React.FC<TriviaGameProps> = ({ onClose }) => {
 
     // Timer
     useEffect(() => {
-        let interval: NodeJS.Timeout | null = null
+        let interval: number | null = null
         if (gameState === 'playing' && timeLeft > 0 && !isAnswered) {
             interval = setInterval(() => {
                 setTimeLeft(prev => prev - 1)

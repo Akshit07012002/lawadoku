@@ -8,10 +8,8 @@ interface SudokuCellProps {
     rowIndex: number
     colIndex: number
     selectedCell: [number, number] | null
-    showPencilMarks: boolean
     onCellClick: (row: number, col: number) => void
     onInputChange: (row: number, col: number, value: string) => void
-    onTogglePencilMark: (row: number, col: number, number: number) => void
     onKeyDown?: (row: number, col: number, key: string) => void
 }
 
@@ -20,10 +18,8 @@ export const SudokuCell: React.FC<SudokuCellProps> = ({
     rowIndex,
     colIndex,
     selectedCell,
-    showPencilMarks,
     onCellClick,
     onInputChange,
-    onTogglePencilMark,
     onKeyDown
 }) => {
     const inputRef = useRef<HTMLInputElement>(null)
@@ -31,11 +27,11 @@ export const SudokuCell: React.FC<SudokuCellProps> = ({
     // Focus input when this cell becomes selected
     useEffect(() => {
         if (selectedCell && selectedCell[0] === rowIndex && selectedCell[1] === colIndex) {
-            if (inputRef.current && !cell.isPrefilled && !showPencilMarks) {
+            if (inputRef.current && !cell.isPrefilled) {
                 inputRef.current.focus()
             }
         }
-    }, [selectedCell, rowIndex, colIndex, cell.isPrefilled, showPencilMarks])
+    }, [selectedCell, rowIndex, colIndex, cell.isPrefilled])
     // All cells have white background - 3x3 blocks are now externally bordered
     const getBoxBackground = () => {
         return 'bg-white'
@@ -96,26 +92,6 @@ export const SudokuCell: React.FC<SudokuCellProps> = ({
                     >
                         {cell.value}
                     </motion.span>
-                ) : showPencilMarks ? (
-                    <div className="absolute inset-0 p-0.5">
-                        <div className="w-full h-full grid grid-cols-3 grid-rows-3 gap-0 text-xs">
-                            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
-                                <button
-                                    key={num}
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        onTogglePencilMark(rowIndex, colIndex, num)
-                                    }}
-                                    className={`w-full h-full flex items-center justify-center text-xs leading-none ${cell.pencilMarks.includes(num)
-                                        ? 'text-blue-700 font-bold bg-blue-100'
-                                        : 'text-gray-400 hover:text-gray-600 hover:bg-gray-50'
-                                        }`}
-                                >
-                                    {num}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
                 ) : (
                     <input
                         ref={inputRef}

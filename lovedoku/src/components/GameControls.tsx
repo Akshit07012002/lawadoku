@@ -9,11 +9,9 @@ interface GameControlsProps {
   onUndo: () => void
   onRedo: () => void
   onHint: () => void
-  onTogglePencilMarks: () => void
   onAutoSolve: () => void
   timer: number
   hintsUsed: number
-  showPencilMarks: boolean
   canUndo: boolean
   canRedo: boolean
   isDevelopment?: boolean
@@ -26,11 +24,9 @@ export const GameControls: React.FC<GameControlsProps> = ({
   onUndo,
   onRedo,
   onHint,
-  onTogglePencilMarks,
   onAutoSolve,
   timer,
   hintsUsed,
-  showPencilMarks,
   canUndo,
   canRedo,
   isDevelopment = false
@@ -86,15 +82,6 @@ export const GameControls: React.FC<GameControlsProps> = ({
           💡
         </button>
 
-        <button
-          onClick={onTogglePencilMarks}
-          className={`px-1 sm:px-2 md:px-4 py-1 sm:py-2 text-xs sm:text-sm rounded-lg transition-colors ${showPencilMarks
-            ? 'bg-blue-600 text-white hover:bg-blue-700'
-            : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
-            }`}
-        >
-          ✏️
-        </button>
 
         {/* Development-only autosolve button */}
         {isDevelopment && (

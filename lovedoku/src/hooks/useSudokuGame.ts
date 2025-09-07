@@ -16,7 +16,6 @@ export const useSudokuGame = (difficulty: Difficulty, onComplete: () => void) =>
   const [timer, setTimer] = useState<number>(0)
   const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false)
   const [hintsUsed, setHintsUsed] = useState<number>(0)
-  const [showPencilMarks, setShowPencilMarks] = useState<boolean>(false)
   const [history, setHistory] = useState<HistoryEntry[]>([])
   const [historyIndex, setHistoryIndex] = useState<number>(-1)
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -307,23 +306,6 @@ export const useSudokuGame = (difficulty: Difficulty, onComplete: () => void) =>
     setGrid(highlightRelatedCells(row, col))
   }, [grid, highlightRelatedCells])
 
-  // Handle pencil marks
-  const togglePencilMark = useCallback((row: number, col: number, number: number) => {
-    if (grid[row][col].isPrefilled) return
-    
-    const newGrid = [...grid]
-    const cell = newGrid[row][col]
-    const index = cell.pencilMarks.indexOf(number)
-    
-    if (index > -1) {
-      cell.pencilMarks.splice(index, 1)
-    } else {
-      cell.pencilMarks.push(number)
-      cell.pencilMarks.sort()
-    }
-    
-    setGrid(newGrid)
-  }, [grid])
 
   // Get hint
   const getHint = useCallback(() => {
@@ -386,7 +368,6 @@ export const useSudokuGame = (difficulty: Difficulty, onComplete: () => void) =>
       setHistoryIndex(-1)
       setSelectedCell(null)
       setIsCompleted(false)
-      // Don't reset showPencilMarks - preserve user preference
     }
     initializeGrid()
   }, [difficulty, generateValidSudoku])
@@ -442,7 +423,6 @@ export const useSudokuGame = (difficulty: Difficulty, onComplete: () => void) =>
       setHistoryIndex(-1)
       setSelectedCell(null)
       setIsCompleted(false)
-      // Don't reset showPencilMarks - preserve user preference
     }
     initializeGrid()
   }, [difficulty, generateValidSudoku])
@@ -456,17 +436,14 @@ export const useSudokuGame = (difficulty: Difficulty, onComplete: () => void) =>
     timer,
     isTimerRunning,
     hintsUsed,
-    showPencilMarks,
     isLoading,
     error,
     canUndo: historyIndex > 0,
     canRedo: historyIndex < history.length - 1,
     
     // Actions
-    setShowPencilMarks,
     handleInputChange,
     handleCellClick,
-    togglePencilMark,
     getHint,
     undo,
     redo,

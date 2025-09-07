@@ -20,15 +20,12 @@ export const SudokuGrid: React.FC<SudokuGridProps> = ({ onComplete }) => {
         selectedCell,
         timer,
         hintsUsed,
-        showPencilMarks,
         isLoading,
         error,
         canUndo,
         canRedo,
-        setShowPencilMarks,
         handleInputChange,
         handleCellClick,
-        togglePencilMark,
         getHint,
         undo,
         redo,
@@ -69,9 +66,6 @@ export const SudokuGrid: React.FC<SudokuGridProps> = ({ onComplete }) => {
 
     // Helper function to find next empty cell in a direction
     const findNextEmptyCell = (row: number, col: number, direction: 'up' | 'down' | 'left' | 'right'): number => {
-        let newRow = row
-        let newCol = col
-
         switch (direction) {
             case 'up':
                 for (let i = row - 1; i >= 0; i--) {
@@ -214,10 +208,6 @@ export const SudokuGrid: React.FC<SudokuGridProps> = ({ onComplete }) => {
                     e.preventDefault()
                     newGame()
                     break
-                case 'p':
-                    e.preventDefault()
-                    setShowPencilMarks(!showPencilMarks)
-                    break
                 case 'escape':
                     e.preventDefault()
                     handleCellClick(-1, -1)
@@ -232,7 +222,7 @@ export const SudokuGrid: React.FC<SudokuGridProps> = ({ onComplete }) => {
                 clearTimeout(debounceTimeoutRef.current)
             }
         }
-    }, [getHint, undo, redo, newGame, canUndo, canRedo, showPencilMarks, setShowPencilMarks, handleCellClick, selectedCell])
+    }, [getHint, undo, redo, newGame, canUndo, canRedo, handleCellClick, selectedCell])
 
     const handleKeyDown = (row: number, col: number, key: string) => {
         // Handle navigation when no cell is selected
@@ -303,10 +293,6 @@ export const SudokuGrid: React.FC<SudokuGridProps> = ({ onComplete }) => {
                 }
                 break
             case 'Enter':
-            case ' ':
-                // Toggle pencil marks mode
-                setShowPencilMarks(!showPencilMarks)
-                return
             case 'h':
             case 'H':
                 // Get hint
@@ -411,11 +397,9 @@ export const SudokuGrid: React.FC<SudokuGridProps> = ({ onComplete }) => {
                 onUndo={undo}
                 onRedo={redo}
                 onHint={getHint}
-                onTogglePencilMarks={() => setShowPencilMarks(!showPencilMarks)}
                 onAutoSolve={autoSolve}
                 timer={timer}
                 hintsUsed={hintsUsed}
-                showPencilMarks={showPencilMarks}
                 canUndo={canUndo}
                 canRedo={canRedo}
                 isDevelopment={true}
@@ -517,10 +501,8 @@ export const SudokuGrid: React.FC<SudokuGridProps> = ({ onComplete }) => {
                                                         rowIndex={rowIndex}
                                                         colIndex={colIndex}
                                                         selectedCell={selectedCell}
-                                                        showPencilMarks={showPencilMarks}
                                                         onCellClick={handleCellClick}
                                                         onInputChange={debouncedHandleInputChange}
-                                                        onTogglePencilMark={togglePencilMark}
                                                         onKeyDown={handleKeyDown}
                                                     />
                                                 )

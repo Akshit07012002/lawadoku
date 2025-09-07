@@ -100,8 +100,7 @@ export const Game2048: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
             const moveRow = (row: Tile[], reverse: boolean = false) => {
                 const filtered = row.filter(tile => tile !== null)
-                if (reverse) filtered.reverse()
-
+                
                 const merged: Tile[] = []
                 for (let i = 0; i < filtered.length; i++) {
                     if (i < filtered.length - 1 && filtered[i].value === filtered[i + 1].value) {
@@ -122,21 +121,19 @@ export const Game2048: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
                 // Pad with nulls
                 while (merged.length < 4) {
-                    if (reverse) {
-                        merged.unshift(null)
-                    } else {
-                        merged.push(null)
-                    }
+                    merged.push(null)
                 }
 
-                if (reverse) merged.reverse()
+                // Reverse the entire array if needed (for right direction)
+                if (reverse) {
+                    return merged.reverse()
+                }
                 return merged
             }
 
             const moveColumn = (colIndex: number, reverse: boolean = false) => {
                 const column = newBoard.map(row => row[colIndex])
                 const filtered = column.filter(tile => tile !== null)
-                if (reverse) filtered.reverse()
 
                 const merged: Tile[] = []
                 for (let i = 0; i < filtered.length; i++) {
@@ -158,14 +155,13 @@ export const Game2048: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
                 // Pad with nulls
                 while (merged.length < 4) {
-                    if (reverse) {
-                        merged.unshift(null)
-                    } else {
-                        merged.push(null)
-                    }
+                    merged.push(null)
                 }
 
-                if (reverse) merged.reverse()
+                // Reverse the entire array if needed (for down direction)
+                if (reverse) {
+                    return merged.reverse()
+                }
                 return merged
             }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Modal } from '../../../../shared/components';
+import { Modal } from '../../../shared/components/Modal';
 
 interface MinesweeperCompletionModalProps {
   isOpen: boolean;

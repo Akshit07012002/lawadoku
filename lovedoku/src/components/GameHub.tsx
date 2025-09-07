@@ -207,8 +207,8 @@ export const GameHub: React.FC = () => {
                             }`}>Test your knowledge</p>
                     </motion.div>
 
-                </div>
+                </motion.div>
             </div>
         </motion.div>
-    )
+    );
 }

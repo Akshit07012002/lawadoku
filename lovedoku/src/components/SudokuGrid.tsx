@@ -389,7 +389,6 @@ export const SudokuGrid: React.FC<SudokuGridProps> = ({ onComplete }) => {
     return (
         <div className="w-full max-w-4xl mx-auto px-2 sm:px-4">
 
-
             <GameControls
                 difficulty={difficulty}
                 onDifficultyChange={handleDifficultyChange}
@@ -414,7 +413,7 @@ export const SudokuGrid: React.FC<SudokuGridProps> = ({ onComplete }) => {
             >
                 <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-2 sm:p-3 md:p-4 shadow-lg border border-blue-200">
                     <p className="text-xs sm:text-sm md:text-base lg:text-lg text-blue-700 font-medium mb-2">
-                        🧩 Solve the puzzle to unlock your special reward... ✨
+                        🧩 Complete the puzzle to test your skills! 🎯
                     </p>
                     <p className="text-xs text-blue-600">
                         💡 Keyboard shortcuts: Arrow keys/Tab to navigate (desktop), 1-9 to input, H for hint, U/R for undo/redo, N for new game, P for pencil marks, Esc to clear selection

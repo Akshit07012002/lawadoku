@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, useRef } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useSound } from '../hooks/useSound'
 import { useHighScores } from '../contexts/HighScoresContext'
 import { useAchievements } from '../contexts/AchievementsContext'
